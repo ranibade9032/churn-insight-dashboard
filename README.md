@@ -1,4 +1,3 @@
-# churn-insight-dashboard
 # CHURN INSIGHT — Customer Retention Intelligence
 
 ### A Comprehensive Exploratory Data Analysis & Strategic Decision-Support Report
