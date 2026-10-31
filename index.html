@@ -1,0 +1,249 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CHURN INSIGHT | Customer Retention Intelligence</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root {
+  --bg:#080d1b; --card:#121c31; --line:#263653;
+  --text:#eef4ff; --muted:#9aaaca;
+  --cyan:#22d3ee; --blue:#60a5fa; --purple:#a78bfa;
+  --pink:#fb7185; --green:#34d399;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:radial-gradient(circle at top right,#17294c,var(--bg) 50%);
+  color:var(--text);font-family:Arial, sans-serif
+}
+header{padding:35px 6%;border-bottom:1px solid var(--line)}
+.tag{color:var(--cyan);font-size:12px;letter-spacing:3px;font-weight:bold}
+h1{font-size:clamp(30px,5vw,48px);margin:14px 0}
+h1 span{background:linear-gradient(90deg,var(--cyan),var(--purple));color:transparent;background-clip:text}
+header p,.muted{color:var(--muted);line-height:1.7}
+nav{display:flex;gap:22px;flex-wrap:wrap;margin-top:20px}
+nav a{color:#b7c8e7;text-decoration:none;font-size:13px}
+nav a:hover{color:var(--cyan)}
+main{max-width:1400px;margin:auto;padding:25px 5%}
+.section-title{margin:35px 0 16px}
+.section-title h2{font-size:21px;margin-bottom:5px}
+.section-title p{font-size:13px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.card{
+ background:linear-gradient(145deg,#17243d,#10182a);
+ border:1px solid var(--line);border-radius:17px;padding:22px;
+ box-shadow:0 12px 30px #0002;min-width:0
+}
+.label{font-size:12px;color:var(--muted)}
+.value{font-size:clamp(24px,3vw,34px);font-weight:bold;margin:15px 0 8px}
+.small{font-size:11px;color:var(--muted)}
+.cyan{color:var(--cyan)}.pink{color:var(--pink)}
+.green{color:var(--green)}.purple{color:var(--purple)}
+.charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.chart{height:290px;margin-top:20px}
+.chart h3{font-size:15px}
+.insights{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.insight h3{font-size:16px}
+.insight p{font-size:13px;color:var(--muted);line-height:1.8}
+.number{font-size:28px;font-weight:bold;color:var(--cyan)}
+footer{border-top:1px solid var(--line);padding:25px 6%;color:var(--muted);font-size:12px}
+@media(max-width:850px){
+ .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .charts,.insights{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+ .grid{grid-template-columns:1fr}
+ header{padding:25px 5%}
+}
+</style>
+</head>
+<body>
+<header>
+ <div class="tag">CUSTOMER ANALYTICS / DECISION SUPPORT</div>
+ <h1>CHURN <span>INSIGHT</span></h1>
+ <h3>Customer Retention Intelligence Dashboard</h3>
+ <p>Explore customer attrition, revenue exposure and retention opportunities.</p>
+ <nav>
+  <a href="#overview">Overview</a>
+  <a href="#analytics">Analytics</a>
+  <a href="#insights">Key Findings</a>
+  <a href="#strategy">Action Plan</a>
+ </nav>
+</header>
+
+<main>
+<section id="overview">
+ <div class="section-title">
+  <h2>Executive Overview</h2>
+  <p>Customer portfolio performance at a glance</p>
+ </div>
+ <div class="grid">
+  <div class="card">
+   <div class="label">CUSTOMER ACCOUNTS</div>
+   <div class="value">4,225</div>
+   <div class="small">Records analyzed</div>
+  </div>
+  <div class="card">
+   <div class="label">CHURN RATE</div>
+   <div class="value pink">26.53%</div>
+   <div class="small">1,121 churned customers</div>
+  </div>
+  <div class="card">
+   <div class="label">RETAINED CUSTOMERS</div>
+   <div class="value green">3,104</div>
+   <div class="small">73.47% of customers</div>
+  </div>
+  <div class="card">
+   <div class="label">MONTHLY REVENUE AT RISK</div>
+   <div class="value purple">$82.8K</div>
+   <div class="small">Estimated recurring revenue</div>
+  </div>
+ </div>
+</section>
+
+<section id="analytics">
+ <div class="section-title">
+  <h2>Analytics Overview</h2>
+  <p>Customer status and churn-risk comparisons</p>
+ </div>
+ <div class="charts">
+  <div class="card">
+   <h3>Customer Status Distribution</h3>
+   <div class="chart"><canvas id="statusChart"></canvas></div>
+  </div>
+  <div class="card">
+   <h3>Churn Rate by Contract Type</h3>
+   <div class="chart"><canvas id="contractChart"></canvas></div>
+  </div>
+  <div class="card">
+   <h3>Monthly Revenue Breakdown</h3>
+   <div class="chart"><canvas id="revenueChart"></canvas></div>
+  </div>
+  <div class="card">
+   <h3>Service and Churn Comparison</h3>
+   <div class="chart"><canvas id="serviceChart"></canvas></div>
+  </div>
+ </div>
+</section>
+
+<section id="insights">
+ <div class="section-title">
+  <h2>Key Findings</h2>
+  <p>Important retention signals to investigate</p>
+ </div>
+ <div class="insights">
+  <div class="card insight">
+   <div class="number">47.58%</div>
+   <h3>First-Year Churn</h3>
+   <p>New customers show elevated churn risk. Improve onboarding and early customer support.</p>
+  </div>
+  <div class="card insight">
+   <div class="number">45.46%</div>
+   <h3>Month-to-Month Plans</h3>
+   <p>Short-term contracts have higher observed churn than longer contracts.</p>
+  </div>
+  <div class="card insight">
+   <div class="number">14.16%</div>
+   <h3>Online Security Users</h3>
+   <p>Customers with online security show lower observed churn in this analysis. This association does not prove causation.</p>
+  </div>
+ </div>
+</section>
+
+<section id="strategy">
+ <div class="section-title">
+  <h2>Recommended Action Plan</h2>
+  <p>Three practical areas for retention improvement</p>
+ </div>
+ <div class="insights">
+  <div class="card insight">
+   <h3 class="cyan">01 · Customer Onboarding</h3>
+   <p>Schedule welcome check-ins, explain services clearly and proactively resolve early issues.</p>
+  </div>
+  <div class="card insight">
+   <h3 class="purple">02 · Contract Engagement</h3>
+   <p>Test transparent long-term plan offers and measure their effect on customer retention.</p>
+  </div>
+  <div class="card insight">
+   <h3 class="green">03 · Service Experience</h3>
+   <p>Investigate support quality, security options and service issues among high-risk segments.</p>
+  </div>
+ </div>
+</section>
+</main>
+
+<footer>
+ CHURN INSIGHT · Customer Retention Intelligence<br>
+ <span class="small">Project dashboard · Verify metrics against the final dataset before presenting.</span>
+</footer>
+
+<script>
+Chart.defaults.color="#aab9d5";
+Chart.defaults.font.family="Arial";
+const grid="rgba(154,170,202,.13)";
+const common={
+ responsive:true,maintainAspectRatio:false,
+ plugins:{legend:{position:"bottom",labels:{usePointStyle:true,padding:18}}}
+};
+
+new Chart(document.getElementById("statusChart"),{
+ type:"doughnut",
+ data:{
+  labels:["Retained","Churned"],
+  datasets:[{data:[3104,1121],
+   backgroundColor:["#60a5fa","#fb7185"],
+   borderColor:"#121c31",borderWidth:5}]
+ },
+ options:{...common,cutout:"68%"}
+});
+
+new Chart(document.getElementById("contractChart"),{
+ type:"bar",
+ data:{
+  labels:["Month-to-Month","One Year","Two Year"],
+  datasets:[{label:"Churn Rate (%)",
+   data:[45.46,10.73,2.39],
+   backgroundColor:["#fb7185","#60a5fa","#34d399"],
+   borderRadius:7}]
+ },
+ options:{...common,scales:{
+  x:{grid:{display:false}},
+  y:{beginAtZero:true,max:50,grid:{color:grid},
+  ticks:{callback:v=>v+"%"}}
+ },plugins:{legend:{display:false}}}
+});
+
+new Chart(document.getElementById("revenueChart"),{
+ type:"doughnut",
+ data:{
+  labels:["Retained Revenue","Revenue at Risk"],
+  datasets:[{data:[191400.2,82829.6],
+   backgroundColor:["#34d399","#a78bfa"],
+   borderColor:"#121c31",borderWidth:5}]
+ },
+ options:{...common,cutout:"68%"}
+});
+
+new Chart(document.getElementById("serviceChart"),{
+ type:"bar",
+ data:{
+  labels:["Online Security","Premium Tech Support"],
+  datasets:[
+   {label:"With service",data:[14.16,15.00],
+    backgroundColor:"#34d399",borderRadius:5},
+   {label:"Without service",data:[31.65,31.39],
+    backgroundColor:"#fb923c",borderRadius:5}
+  ]
+ },
+ options:{...common,indexAxis:"y",scales:{
+  x:{beginAtZero:true,max:40,grid:{color:grid},
+  ticks:{callback:v=>v+"%"}},
+  y:{grid:{display:false}}
+ }}
+});
+</script>
+</body>
+</html>
