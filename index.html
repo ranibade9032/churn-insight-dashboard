@@ -1,249 +1,609 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CHURN INSIGHT | Customer Retention Intelligence</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
 :root {
-  --bg:#080d1b; --card:#121c31; --line:#263653;
-  --text:#eef4ff; --muted:#9aaaca;
-  --cyan:#22d3ee; --blue:#60a5fa; --purple:#a78bfa;
-  --pink:#fb7185; --green:#34d399;
+    --bg: #080d1c;
+    --panel: #111a30;
+    --panel2: #172440;
+    --blue: #54a8ff;
+    --cyan: #42e8e0;
+    --purple: #a78bfa;
+    --pink: #f472b6;
+    --orange: #ffb86b;
+    --green: #43e6a0;
+    --red: #ff7185;
+    --text: #eff5ff;
+    --muted: #9aaccb;
+    --border: rgba(155, 184, 255, .15);
 }
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  margin:0;background:radial-gradient(circle at top right,#17294c,var(--bg) 50%);
-  color:var(--text);font-family:Arial, sans-serif
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
-header{padding:35px 6%;border-bottom:1px solid var(--line)}
-.tag{color:var(--cyan);font-size:12px;letter-spacing:3px;font-weight:bold}
-h1{font-size:clamp(30px,5vw,48px);margin:14px 0}
-h1 span{background:linear-gradient(90deg,var(--cyan),var(--purple));color:transparent;background-clip:text}
-header p,.muted{color:var(--muted);line-height:1.7}
-nav{display:flex;gap:22px;flex-wrap:wrap;margin-top:20px}
-nav a{color:#b7c8e7;text-decoration:none;font-size:13px}
-nav a:hover{color:var(--cyan)}
-main{max-width:1400px;margin:auto;padding:25px 5%}
-.section-title{margin:35px 0 16px}
-.section-title h2{font-size:21px;margin-bottom:5px}
-.section-title p{font-size:13px;color:var(--muted)}
-.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
-.card{
- background:linear-gradient(145deg,#17243d,#10182a);
- border:1px solid var(--line);border-radius:17px;padding:22px;
- box-shadow:0 12px 30px #0002;min-width:0
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 90px;
 }
-.label{font-size:12px;color:var(--muted)}
-.value{font-size:clamp(24px,3vw,34px);font-weight:bold;margin:15px 0 8px}
-.small{font-size:11px;color:var(--muted)}
-.cyan{color:var(--cyan)}.pink{color:var(--pink)}
-.green{color:var(--green)}.purple{color:var(--purple)}
-.charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-.chart{height:290px;margin-top:20px}
-.chart h3{font-size:15px}
-.insights{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-.insight h3{font-size:16px}
-.insight p{font-size:13px;color:var(--muted);line-height:1.8}
-.number{font-size:28px;font-weight:bold;color:var(--cyan)}
-footer{border-top:1px solid var(--line);padding:25px 6%;color:var(--muted);font-size:12px}
-@media(max-width:850px){
- .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
- .charts,.insights{grid-template-columns:1fr}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background:
+        radial-gradient(ellipse at 10% 5%, #1d2860 0, transparent 32%),
+        radial-gradient(ellipse at 95% 25%, #32185a 0, transparent 30%),
+        radial-gradient(ellipse at 50% 90%, #102c42 0, transparent 35%),
+        var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
 }
-@media(max-width:480px){
- .grid{grid-template-columns:1fr}
- header{padding:25px 5%}
+
+::selection {
+    background: var(--purple);
+    color: white;
+}
+
+/* PREMIUM HERO */
+
+header {
+    position: relative;
+    overflow: hidden;
+    padding: 75px 7% 65px;
+    background:
+        linear-gradient(115deg, rgba(15, 26, 65, .98),
+        rgba(45, 35, 110, .91), rgba(8, 86, 112, .87));
+    border-bottom: 1px solid #8b9fff45;
+}
+
+header::before,
+header::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(2px);
+    pointer-events: none;
+}
+
+header::before {
+    width: 340px;
+    height: 340px;
+    right: 5%;
+    top: -160px;
+    background: #8b5cf633;
+    border: 1px solid #c4b5fd40;
+    box-shadow: 0 0 100px #8b5cf622;
+}
+
+header::after {
+    width: 220px;
+    height: 220px;
+    right: 24%;
+    bottom: -170px;
+    background: #22d3ee1c;
+    border: 1px solid #22d3ee44;
+}
+
+.brand {
+    color: var(--cyan);
+    letter-spacing: 3px;
+    font-size: 12px;
+    font-weight: 800;
+    position: relative;
+    z-index: 1;
+}
+
+header h1 {
+    font-size: clamp(40px, 7vw, 76px);
+    line-height: 1.12;
+    letter-spacing: -2px;
+    margin: 20px 0;
+    font-weight: 900;
+    position: relative;
+    z-index: 1;
+}
+
+header h1 span {
+    background: linear-gradient(90deg, #65d8ff, #c4a5ff, #ff9ed2);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+header p {
+    color: #d3e0ff;
+    max-width: 850px;
+    font-size: 15px;
+    position: relative;
+    z-index: 1;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 26px;
+    position: relative;
+    z-index: 1;
+}
+
+.tag {
+    padding: 8px 14px;
+    border: 1px solid #a5b4fc45;
+    border-radius: 30px;
+    background: #ffffff0b;
+    backdrop-filter: blur(12px);
+    color: #e5eaff;
+    font-size: 11px;
+    font-weight: 700;
+    transition: .25s;
+}
+
+.tag:hover {
+    background: #8b5cf633;
+    border-color: var(--purple);
+    transform: translateY(-3px);
+}
+
+/* GLASS NAVIGATION */
+
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    padding: 15px 4%;
+    background: rgba(8, 13, 28, .88);
+    backdrop-filter: blur(22px);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+nav a {
+    text-decoration: none;
+    color: #b7c6e5;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: .25s;
+}
+
+nav a:hover {
+    color: white;
+    background: linear-gradient(120deg, #4f46e5, #0e7490);
+    box-shadow: 0 0 22px #6366f133;
+}
+
+/* MAIN LAYOUT */
+
+main {
+    width: min(1400px, 100%);
+    margin: auto;
+    padding: 45px 28px;
+}
+
+.section {
+    margin-bottom: 48px;
+    scroll-margin-top: 90px;
+    animation: fadeIn .65s ease both;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.section-head {
+    margin-bottom: 24px;
+    position: relative;
+}
+
+.eyebrow {
+    color: var(--cyan);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 7px;
+}
+
+h2 {
+    color: var(--text);
+    font-size: clamp(23px, 3vw, 32px);
+    font-weight: 800;
+    letter-spacing: -.8px;
+    margin: 3px 0 8px;
+}
+
+.subtitle {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+/* PREMIUM CARDS */
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.two-col {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.three-col {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.card {
+    position: relative;
+    min-width: 0;
+    padding: 25px;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: linear-gradient(145deg, #172440ed, #0f192ceb);
+    box-shadow: 0 12px 35px #00000022;
+    overflow: hidden;
+    transition:
+        transform .3s ease,
+        border-color .3s ease,
+        box-shadow .3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    border-color: #8b9fff65;
+    box-shadow: 0 18px 45px #00000035, 0 0 25px #8b5cf611;
+}
+
+.panel-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: #edf4ff;
+    margin-bottom: 8px;
+}
+
+.panel-note {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 22px;
+}
+
+/* KPI GLOW CARDS */
+
+.kpi {
+    --accent: var(--blue);
+    background:
+        radial-gradient(ellipse at 100% 0%, color-mix(in srgb, var(--accent) 17%, transparent), transparent 65%),
+        linear-gradient(145deg, #172440, #0e172b);
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    padding: 24px;
+}
+
+.kpi::before {
+    content: "";
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    top: -52px;
+    right: -40px;
+    border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    box-shadow: 0 0 35px color-mix(in srgb, var(--accent) 15%, transparent);
+}
+
+.kpi::after {
+    content: "";
+    height: 3px;
+    position: absolute;
+    bottom: 0;
+    left: 12%;
+    right: 12%;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+
+.kpi-label {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    color: #b9c8e6;
+    line-height: 1.7;
+}
+
+.kpi-value {
+    font-size: clamp(22px, 2.5vw, 31px);
+    font-weight: 900;
+    letter-spacing: -.7px;
+    color: var(--accent);
+    margin: 12px 0 9px;
+    overflow-wrap: anywhere;
+    text-shadow: 0 0 25px color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+.kpi-note {
+    font-size: 11px;
+    color: #9caed0;
+}
+
+/* COLORFUL DATA BARS */
+
+.bar-row {
+    margin: 20px 0;
+}
+
+.bar-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 12px;
+    color: #c4d1e9;
+    margin-bottom: 9px;
+}
+
+.bar-info strong {
+    color: #f2f6ff;
+    white-space: nowrap;
+    font-weight: 800;
+}
+
+.track {
+    height: 10px;
+    background: #263450;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: inset 0 2px 5px #00000030;
+}
+
+.fill {
+    height: 100%;
+    width: 0;
+    border-radius: 20px;
+    background: linear-gradient(90deg, var(--bar, #54a8ff), #a78bfa);
+    box-shadow: 0 0 14px color-mix(in srgb, var(--bar, #54a8ff) 38%, transparent);
+    animation: growBar 1.2s ease forwards;
+}
+
+@keyframes growBar {
+    from { width: 0; }
+}
+
+/* INSIGHT BOXES */
+
+.note {
+    padding: 17px 19px;
+    border-radius: 12px;
+    border: 1px solid #54a8ff35;
+    border-left: 4px solid var(--blue);
+    background: linear-gradient(100deg, #2563eb17, #17244080);
+    color: #d5e5ff;
+    margin-top: 18px;
+    font-size: 12px;
+}
+
+.note strong { color: #8ed7ff; }
+
+.note.warn {
+    background: linear-gradient(100deg, #f9731619, #17244080);
+    border-color: #ffb86b40;
+    border-left-color: var(--orange);
+}
+
+.note.warn strong { color: var(--orange); }
+
+.note.success {
+    background: linear-gradient(100deg, #10b98118, #17244080);
+    border-color: #43e6a040;
+    border-left-color: var(--green);
+}
+
+.note.success strong { color: var(--green); }
+
+/* DATA ROWS */
+
+.stat-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 13px 0;
+    border-bottom: 1px solid #ffffff12;
+    color: #b7c6e2;
+    font-size: 12px;
+}
+
+.stat-line:last-child { border-bottom: none; }
+
+.stat-line strong {
+    color: #f0f5ff;
+    text-align: right;
+    font-weight: 800;
+}
+
+/* PROBLEM STATEMENTS */
+
+.ps {
+    border-top: 3px solid var(--accent, var(--blue));
+    background:
+        linear-gradient(160deg, color-mix(in srgb, var(--accent, var(--blue)) 10%, #172440), #101a30 70%);
+}
+
+.ps-number {
+    font-size: 10px;
+    letter-spacing: 1.4px;
+    color: var(--accent);
+    font-weight: 900;
+}
+
+.ps h3 {
+    color: #f1f5ff;
+    font-size: 16px;
+    margin: 12px 0 10px;
+    line-height: 1.5;
+}
+
+.ps p {
+    color: #aabbd8;
+    font-size: 12px;
+}
+
+.pill {
+    display: inline-block;
+    border: 1px solid color-mix(in srgb, var(--accent, var(--blue)) 35%, transparent);
+    border-radius: 30px;
+    padding: 6px 11px;
+    margin-top: 15px;
+    background: color-mix(in srgb, var(--accent, var(--blue)) 12%, transparent);
+    color: var(--accent, var(--blue));
+    font-size: 10px;
+    font-weight: 800;
+}
+
+/* RECOMMENDATIONS */
+
+.recommendation {
+    border-top: 3px solid var(--accent);
+    background:
+        radial-gradient(ellipse at 100% 0%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 60%),
+        linear-gradient(145deg, #172440, #0e172b);
+}
+
+.priority {
+    color: var(--accent);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 1.3px;
+}
+
+.recommendation h3 {
+    color: #f1f5ff;
+    font-size: 19px;
+    line-height: 1.45;
+    margin: 13px 0;
+}
+
+.recommendation p {
+    color: #afbfdb;
+    font-size: 12px;
+    margin-bottom: 12px;
+}
+
+.impact {
+    color: var(--accent);
+    font-size: 29px;
+    font-weight: 900;
+    margin-top: 16px;
+}
+
+.impact-label {
+    color: #a9bad7;
+    font-size: 11px;
+}
+
+/* TABLE */
+
+.table-wrap {
+    overflow-x: auto;
+    padding: 0;
+}
+
+table {
+    width: 100%;
+    min-width: 650px;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+th {
+    background: linear-gradient(100deg, #263b72, #3b3378);
+    color: #f3f5ff;
+    text-align: left;
+    padding: 16px;
+    font-weight: 800;
+}
+
+td {
+    padding: 15px 16px;
+    color: #c1cde4;
+    border-bottom: 1px solid #ffffff10;
+}
+
+tbody tr {
+    background: #111c32;
+    transition: background .2s;
+}
+
+tbody tr:nth-child(even) { background: #15213a; }
+tbody tr:hover { background: #24345a; }
+tbody tr td:first-child { color: #86d9ff; font-weight: 700; }
+
+/* LISTS */
+
+ul {
+    padding-left: 22px;
+}
+
+li {
+    color: #c4d1e8;
+    margin: 10px 0;
+    font-size: 13px;
+}
+
+li::marker { color: var(--cyan); }
+
+/* FOOTER */
+
+footer {
+    padding: 40px 20px;
+    text-align: center;
+    background: linear-gradient(110deg, #101831, #201b45, #102b3e);
+    border-top: 1px solid #8b9fff35;
+    color: #9db0d2;
+    font-size: 11px;
+}
+
+footer strong {
+    display: block;
+    font-size: 16px;
+    color: #f0f5ff;
+    margin-bottom: 8px;
+}
+
+footer p { margin-top: 6px; }
+
+/* MOBILE RESPONSIVE */
+
+@media (max-width: 1000px) {
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .three-col { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 650px) {
+    header { padding: 45px 22px; }
+    header h1 { letter-spacing: -1px; }
+    main { padding: 25px 14px; }
+    .grid, .two-col, .three-col { grid-template-columns: 1fr; }
+    nav { gap: 5px; padding: 10px 8px; }
+    nav a { font-size: 10px; padding: 7px 8px; }
+    .card { padding: 20px; }
+    .section { margin-bottom: 35px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: .01ms !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+    }
 }
 </style>
-</head>
-<body>
-<header>
- <div class="tag">CUSTOMER ANALYTICS / DECISION SUPPORT</div>
- <h1>CHURN <span>INSIGHT</span></h1>
- <h3>Customer Retention Intelligence Dashboard</h3>
- <p>Explore customer attrition, revenue exposure and retention opportunities.</p>
- <nav>
-  <a href="#overview">Overview</a>
-  <a href="#analytics">Analytics</a>
-  <a href="#insights">Key Findings</a>
-  <a href="#strategy">Action Plan</a>
- </nav>
-</header>
-
-<main>
-<section id="overview">
- <div class="section-title">
-  <h2>Executive Overview</h2>
-  <p>Customer portfolio performance at a glance</p>
- </div>
- <div class="grid">
-  <div class="card">
-   <div class="label">CUSTOMER ACCOUNTS</div>
-   <div class="value">4,225</div>
-   <div class="small">Records analyzed</div>
-  </div>
-  <div class="card">
-   <div class="label">CHURN RATE</div>
-   <div class="value pink">26.53%</div>
-   <div class="small">1,121 churned customers</div>
-  </div>
-  <div class="card">
-   <div class="label">RETAINED CUSTOMERS</div>
-   <div class="value green">3,104</div>
-   <div class="small">73.47% of customers</div>
-  </div>
-  <div class="card">
-   <div class="label">MONTHLY REVENUE AT RISK</div>
-   <div class="value purple">$82.8K</div>
-   <div class="small">Estimated recurring revenue</div>
-  </div>
- </div>
-</section>
-
-<section id="analytics">
- <div class="section-title">
-  <h2>Analytics Overview</h2>
-  <p>Customer status and churn-risk comparisons</p>
- </div>
- <div class="charts">
-  <div class="card">
-   <h3>Customer Status Distribution</h3>
-   <div class="chart"><canvas id="statusChart"></canvas></div>
-  </div>
-  <div class="card">
-   <h3>Churn Rate by Contract Type</h3>
-   <div class="chart"><canvas id="contractChart"></canvas></div>
-  </div>
-  <div class="card">
-   <h3>Monthly Revenue Breakdown</h3>
-   <div class="chart"><canvas id="revenueChart"></canvas></div>
-  </div>
-  <div class="card">
-   <h3>Service and Churn Comparison</h3>
-   <div class="chart"><canvas id="serviceChart"></canvas></div>
-  </div>
- </div>
-</section>
-
-<section id="insights">
- <div class="section-title">
-  <h2>Key Findings</h2>
-  <p>Important retention signals to investigate</p>
- </div>
- <div class="insights">
-  <div class="card insight">
-   <div class="number">47.58%</div>
-   <h3>First-Year Churn</h3>
-   <p>New customers show elevated churn risk. Improve onboarding and early customer support.</p>
-  </div>
-  <div class="card insight">
-   <div class="number">45.46%</div>
-   <h3>Month-to-Month Plans</h3>
-   <p>Short-term contracts have higher observed churn than longer contracts.</p>
-  </div>
-  <div class="card insight">
-   <div class="number">14.16%</div>
-   <h3>Online Security Users</h3>
-   <p>Customers with online security show lower observed churn in this analysis. This association does not prove causation.</p>
-  </div>
- </div>
-</section>
-
-<section id="strategy">
- <div class="section-title">
-  <h2>Recommended Action Plan</h2>
-  <p>Three practical areas for retention improvement</p>
- </div>
- <div class="insights">
-  <div class="card insight">
-   <h3 class="cyan">01 · Customer Onboarding</h3>
-   <p>Schedule welcome check-ins, explain services clearly and proactively resolve early issues.</p>
-  </div>
-  <div class="card insight">
-   <h3 class="purple">02 · Contract Engagement</h3>
-   <p>Test transparent long-term plan offers and measure their effect on customer retention.</p>
-  </div>
-  <div class="card insight">
-   <h3 class="green">03 · Service Experience</h3>
-   <p>Investigate support quality, security options and service issues among high-risk segments.</p>
-  </div>
- </div>
-</section>
-</main>
-
-<footer>
- CHURN INSIGHT · Customer Retention Intelligence<br>
- <span class="small">Project dashboard · Verify metrics against the final dataset before presenting.</span>
-</footer>
-
-<script>
-Chart.defaults.color="#aab9d5";
-Chart.defaults.font.family="Arial";
-const grid="rgba(154,170,202,.13)";
-const common={
- responsive:true,maintainAspectRatio:false,
- plugins:{legend:{position:"bottom",labels:{usePointStyle:true,padding:18}}}
-};
-
-new Chart(document.getElementById("statusChart"),{
- type:"doughnut",
- data:{
-  labels:["Retained","Churned"],
-  datasets:[{data:[3104,1121],
-   backgroundColor:["#60a5fa","#fb7185"],
-   borderColor:"#121c31",borderWidth:5}]
- },
- options:{...common,cutout:"68%"}
-});
-
-new Chart(document.getElementById("contractChart"),{
- type:"bar",
- data:{
-  labels:["Month-to-Month","One Year","Two Year"],
-  datasets:[{label:"Churn Rate (%)",
-   data:[45.46,10.73,2.39],
-   backgroundColor:["#fb7185","#60a5fa","#34d399"],
-   borderRadius:7}]
- },
- options:{...common,scales:{
-  x:{grid:{display:false}},
-  y:{beginAtZero:true,max:50,grid:{color:grid},
-  ticks:{callback:v=>v+"%"}}
- },plugins:{legend:{display:false}}}
-});
-
-new Chart(document.getElementById("revenueChart"),{
- type:"doughnut",
- data:{
-  labels:["Retained Revenue","Revenue at Risk"],
-  datasets:[{data:[191400.2,82829.6],
-   backgroundColor:["#34d399","#a78bfa"],
-   borderColor:"#121c31",borderWidth:5}]
- },
- options:{...common,cutout:"68%"}
-});
-
-new Chart(document.getElementById("serviceChart"),{
- type:"bar",
- data:{
-  labels:["Online Security","Premium Tech Support"],
-  datasets:[
-   {label:"With service",data:[14.16,15.00],
-    backgroundColor:"#34d399",borderRadius:5},
-   {label:"Without service",data:[31.65,31.39],
-    backgroundColor:"#fb923c",borderRadius:5}
-  ]
- },
- options:{...common,indexAxis:"y",scales:{
-  x:{beginAtZero:true,max:40,grid:{color:grid},
-  ticks:{callback:v=>v+"%"}},
-  y:{grid:{display:false}}
- }}
-});
-</script>
-</body>
-</html>
